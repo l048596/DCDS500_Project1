@@ -55,7 +55,7 @@ selection <- function(x, r){
     mutate(admit = ifelse(row_number() <= round(nrow(x) * r), "TRUE", "FALSE"))
   
   b <- a %>%
-    group_by(g, x1, x2, f, estimated_f, admit) %>%
+    group_by(g, x1, x2, estimated_x2, f, estimated_f, admit) %>%
     summarise(n = n()) %>%
     arrange(desc(estimated_f)) %>% 
     arrange(!g == "D") %>%
@@ -67,7 +67,10 @@ selection <- function(x, r){
 ## Part A. Scenarios
 ### Part A-1. Default Scenario (Scenario A)
 default <- function(x){
-  x <- x %>% mutate(estimated_f = ifelse(x1 & x2, 1, 0))
+  x <- x %>% 
+    mutate(estimated_x2 = x2) %>% 
+    mutate(estimated_f = ifelse(x1 & x2, 1, 0))
+  return(x)
 }
 
 df <- default(question)
